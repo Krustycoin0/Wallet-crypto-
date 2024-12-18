@@ -3,85 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trading Crypto</title>
+    <title>DEX su Solana</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-      <div class="header">
-            <input type="text" id="search-crypto" placeholder="Cerca criptovaluta...">
-           <div class="header-icons">
-               <img src="settings-icon.png" alt="Impostazioni" class="icon" >
-                <img src="gift-icon.png" alt="Regali" class="icon">
-               <div class="notification-icon">
-                 <img src="notification-icon.png" alt="Notifiche" class="icon" >
-                 <span class="notification-badge">99+</span>
-               </div>
-          </div>
-       </div>
-        <h2>Mercato</h2>
-        <div class="tabs">
-            <button class="tab active" onclick="showTab('preferiti')">Preferiti</button>
-             <button class="tab" onclick="showTab('hot')">Hot</button>
-            <button class="tab" onclick="showTab('recenti')">I più recenti</button>
-             <button class="tab" onclick="showTab('gainers')">Gainers</button>
-             <button class="tab" onclick="showTab('perdenti')">Perdenti</button>
+        <h1>DEX su Solana</h1>
+
+        <div class="wallet-section">
+            <h2>Connetti Wallet</h2>
+           <button id="connect-button">Connetti</button>
+          <p>Wallet: <span id="wallet-address"></span></p>
+        <p>Saldo: <span id="wallet-balance"></span> SOL</p>
         </div>
-         <table class="crypto-table">
+
+        <div class="trade-section">
+            <h2>Trade</h2>
+          <div class="form-group">
+                 <label for="trade-type">Tipo</label>
+                <select id="trade-type">
+                    <option value="buy">Acquista</option>
+                    <option value="sell">Vendi</option>
+                </select>
+             </div>
+            <div class="form-group">
+                <label for="token-select">Token</label>
+                <select id="token-select">
+                    <option value="SOL">SOL</option>
+                    <!-- Altri token saranno aggiunti dinamicamente con JS -->
+                </select>
+            </div>
+             <div class="form-group">
+                <label for="trade-amount">Importo</label>
+                 <input type="number" id="trade-amount" placeholder="Inserisci l'importo">
+             </div>
+            <div class="form-group">
+                <button id="trade-button">Esegui Trade</button>
+            </div>
+        </div>
+
+        <div class="orders-section">
+            <h2>Ordini Aperti</h2>
+           <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Token</th>
+                        <th>Importo</th>
+                         <th>Status</th>
+                     </tr>
+                </thead>
+                <tbody id="orders-body">
+
+                </tbody>
+            </table>
+
+        </div>
+        <div class="wallet-info">
+           <h2>Portafoglio</h2>
+        </div>
+        <table class="wallet-table">
             <thead>
                 <tr>
-                     <th></th>
-                    <th>Criptovaluta</th>
-                    <th>Ultimo Prezzo</th>
-                    <th>Modifica</th>
-                     <th>Trade</th>
+                    <th>Token</th>
+                    <th>Balance</th>
                 </tr>
             </thead>
-            <tbody id="crypto-list">
-            </tbody>
+            <tbody id="wallet-body"></tbody>
         </table>
-           <a href="#" class="view-more">Vedi altro ></a>
-         <div class="wallet-info">
-             <p>Wallet: <span id="wallet-address">0xD54DF1e7F8A84D1e8d0444FA3824d6485672b8F8</span></p>
-              <p>Saldo: <span id="wallet-balance">0</span> USDT</p>
-           </div>
-        <div class="bottom-nav">
-             <div class="nav-item active">
-               <img src="home-icon.png" alt="HTX" class="nav-icon">
-               <span>HTX</span>
-            </div>
-            <div class="nav-item">
-                <img src="market-icon.png" alt="Mercati" class="nav-icon">
-                <span>Mercati</span>
-            </div>
-            <div class="nav-item">
-                <img src="trade-icon.png" alt="Trade" class="nav-icon">
-                <span>Trade</span>
-            </div>
-            <div class="nav-item">
-                <img src="futures-icon.png" alt="Futures" class="nav-icon">
-                <span>Futures</span>
-            </div>
-            <div class="nav-item">
-                <img src="asset-icon.png" alt="Asset" class="nav-icon">
-                <span>Asset</span>
-           </div>
-        </div>
-     <div class="trade-modal" id="tradeModal">
-             <div class="trade-content">
-                <span class="close-button" onclick="closeTradeModal()">×</span>
-                 <h2>Trade</h2>
-                    <p>Criptovaluta: <span id="trade-crypto"></span></p>
-                 <div class="form-group">
-                     <label for="trade-amount">Importo (USDT):</label>
-                     <input type="number" id="trade-amount" placeholder="Inserisci importo">
-                 </div>
-                 <div class="form-group">
-                     <button onclick="executeTrade()">Trade</button>
-                 </div>
-             </div>
-        </div>
-    </div>
+     </div>
 
     <script src="script.js"></script>
 </body>
