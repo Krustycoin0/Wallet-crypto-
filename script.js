@@ -1,78 +1,37 @@
-const cryptoData = [
-    {
-        id: 'trx',
-        name: 'TRX/USDT',
-        price: 0.276940,
-        change: -2.49,
-       img: "trx-icon.png"
-    },
-    {
-        id: 'xlm',
-        name: 'XLM/USDT',
-        price: 0.435038,
-        change: -0.34,
-        img: "xlm-icon.png"
-    },
-    {
-       id: 'atom',
-        name: 'ATOM/USDT',
-        price: 8.4499,
-       change: -1.54,
-       img: "atom-icon.png"
-    },
-    {
-        id: 'sui',
-        name: 'SUI/USDT',
-        price: 4.5904,
-        change: -3.49,
-        img: "sui-icon.png"
-    },
-    {
-        id: 'etc',
-        name: 'ETC/USDT',
-        price: 32.0858,
-        change: -1.55,
-       img: "etc-icon.png"
-    },
-    {
-        id: 'dot',
-        name: 'DOT/USDT',
-        price: 8.3856,
-        change: -2.54,
-        img: "dot-icon.png"
-    },
-    {
-      id: 'manta',
-        name: 'MANTA/USDT',
-        price: 0.9834,
-        change: -5.21,
-        img: "manta-icon.png"
-    },
-    {
-        id: 'dash',
-        name: 'DASH/USDT',
-        price: 43.26,
-        change: -2.19,
-         img: "dash-icon.png"
-    },
-    {
-        id: 'woo',
-        name: 'WOO/USDT',
-        price: 0.25404,
-        change: -2.58,
-        img: "woo-icon.png"
-    },
-    {
-        id: 'ton',
-        name: 'TON/USDT',
-        price: 5.7813,
-        change: -2.50,
-        img: "ton-icon.png"
-    },
-
-];
-let userBalances = {}; // Saldo simulato per le crypto
+const API_KEY = 'C5CF3608-A514-45C1-88AD-35C48C2AF9EA';
+const API_URL = 'https://rest.coinapi.io/v1/assets';
+const walletAddress = '0xD54DF1e7F8A84D1e8d0444FA3824d6485672b8F8';
+let userBalance = 1000; // Saldo iniziale simulato
+let cryptoData = [];
+const walletBalanceElement = document.getElementById('wallet-balance');
 const cryptoList = document.getElementById('crypto-list');
+
+async function fetchCryptoData() {
+  try {
+    const response = await fetch(API_URL, {
+      headers: {
+        'X-CoinAPI-Key': API_KEY,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+      cryptoData = data.filter(asset => asset.type_is_crypto && asset.price_usd)
+          .map(asset => ({
+        id: asset.asset_id,
+        name: `${asset.asset_id}/${'USDT'}`,
+        price: asset.price_usd,
+        img: "crypto-icon.png",
+        change: (Math.random() * (5 - -5) + -5).toFixed(2)
+      }));
+
+    updateCryptoList();
+  } catch (error) {
+    console.error('Errore nel recupero dei dati delle criptovalute:', error);
+  }
+}
+
 function updateCryptoList(data = cryptoData){
        cryptoList.innerHTML = '';
 
@@ -90,7 +49,7 @@ function updateCryptoList(data = cryptoData){
             row.appendChild(nameCell);
 
              const priceCell = document.createElement('td');
-             priceCell.textContent = crypto.price;
+             priceCell.textContent = crypto.price.toFixed(6);
             row.appendChild(priceCell);
 
             const changeCell = document.createElement('td');
@@ -105,7 +64,14 @@ function updateCryptoList(data = cryptoData){
            changeCell.appendChild(changeSpan);
           row.appendChild(changeCell);
 
-
+        const tradeCell = document.createElement('td');
+           const tradeButton = document.createElement('a');
+           tradeButton.textContent = 'Trade';
+            tradeButton.href = '#';
+             tradeButton.classList.add('trade-button');
+            tradeButton.onclick = () => openTradeModal(crypto);
+          tradeCell.appendChild(tradeButton)
+         row.appendChild(tradeCell);
              cryptoList.appendChild(row);
         });
 
@@ -125,4 +91,40 @@ function updateCryptoList(data = cryptoData){
         updateCryptoList(filteredData)
     });
 
-  updateCryptoList();
+function updateWalletBalance() {
+        walletBalanceElement.textContent = userBalance.toFixed(2)
+    }
+ function openTradeModal(crypto) {
+        const modal = document.getElementById('tradeModal');
+         modal.style.display = 'flex';
+          const cryptoName = document.getElementById('trade-crypto')
+            cryptoName.textContent = crypto.name
+         modal.dataset.cryptoId = crypto.id
+}
+
+    function closeTradeModal() {
+        const modal = document.getElementById('tradeModal');
+        modal.style.display = 'none';
+    }
+ async  function executeTrade() {
+      const modal = document.getElementById('tradeModal');
+        const cryptoId = modal.dataset.cryptoId
+      const amountInput = document.getElementById('trade-amount')
+      const amount = parseFloat(amountInput.value);
+        if (isNaN(amount) || amount <= 0) {
+           alert("Inserisci un importo valido.");
+         return;
+     }
+        if(userBalance < amount){
+           alert("Saldo insufficiente")
+           return
+       }
+      userBalance -= amount;
+        const fee = amount * 0.002; // 0.002% di trattenuta
+        userBalance -= fee;
+        updateWalletBalance();
+        closeTradeModal();
+     alert("Trade eseguito con successo!")
+  }
+ fetchCryptoData();
+  updateWalletBalance();
