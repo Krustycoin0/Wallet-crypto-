@@ -3,96 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Wallet (Simulato)</title>
+    <title>Mercato Crypto</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Crypto Wallet (Simulato)</h1>
-        <div class="wallet-section">
-          <h2>Gestione Wallet</h2>
-           <div class="form-group">
-              <label for="wallet-action">Azione Wallet:</label>
-              <select id="wallet-action">
-                  <option value="create">Crea Nuovo Wallet</option>
-                   <option value="import">Importa Wallet</option>
-               </select>
-           </div>
-             <div class="form-group">
-              <label for="wallet-input">Chiave privata (o frase seed):</label>
-              <input type="text" id="wallet-input"  placeholder="Inserisci la chiave privata (o frase seed)" >
+      <div class="header">
+            <input type="text" id="search-crypto" placeholder="Cerca criptovaluta...">
+           <div class="header-icons">
+               <img src="settings-icon.png" alt="Impostazioni" class="icon" >
+                <img src="gift-icon.png" alt="Regali" class="icon">
+               <div class="notification-icon">
+                 <img src="notification-icon.png" alt="Notifiche" class="icon" >
+                 <span class="notification-badge">99+</span>
+               </div>
           </div>
-             <div class="form-group">
-             <button onclick="manageWallet()">Invia</button>
-          </div>
+       </div>
+        <h2>Preferiti</h2>
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('preferiti')">Preferiti</button>
+             <button class="tab" onclick="showTab('hot')">Hot</button>
+            <button class="tab" onclick="showTab('recenti')">I più recenti</button>
+             <button class="tab" onclick="showTab('gainers')">Gainers</button>
+             <button class="tab" onclick="showTab('perdenti')">Perdenti</button>
         </div>
 
-         <div class="balances-section">
-          <h2>Saldo Disponibile</h2>
-           <table class="balances-table">
-               <thead>
-                   <tr>
-                    <th>Criptovaluta</th>
-                    <th>Saldo</th>
-                   </tr>
-                </thead>
-              <tbody id="balances-body">
-                  </tbody>
-             </table>
-           </div>
-
-          <div class="send-section">
-              <h2>Invia Transazione</h2>
-            <div class="form-group">
-             <label for="send-currency">Criptovaluta</label>
-             <select id="send-currency">
-                    <option value="btc">Bitcoin</option>
-                    <option value="eth">Ethereum</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="send-address">Indirizzo Destinatario</label>
-              <input type="text" id="send-address" placeholder="Inserisci l'indirizzo del destinatario">
-           </div>
-              <div class="form-group">
-                <label for="send-amount">Importo</label>
-                <input type="number" id="send-amount" placeholder="Inserisci l'importo da inviare">
-            </div>
-            <div class="form-group">
-              <button onclick="sendTransaction()">Invia Transazione</button>
-         </div>
-      </div>
-
-      <div class="receive-section">
-          <h2>Ricevi Transazioni</h2>
-            <div class="form-group">
-              <label for="receive-currency">Criptovaluta</label>
-              <select id="receive-currency">
-                    <option value="btc">Bitcoin</option>
-                    <option value="eth">Ethereum</option>
-              </select>
-           </div>
-            <div class="form-group">
-               <label for="receive-address">Indirizzo Pubblico</label>
-              <input type="text" id="receive-address"  placeholder="Indirizzo Pubblico generato">
-              <button onclick="generateReceiveAddress()" >Genera Indirizzo</button>
-             </div>
-        </div>
-
-      <div class="transactions-section">
-            <h2>Cronologia Transazioni</h2>
-        <table class="transactions-table">
+        <table class="crypto-table">
             <thead>
-               <tr>
-                   <th>Tipo</th>
+                <tr>
+                   <th></th>
                     <th>Criptovaluta</th>
-                    <th>Importo</th>
-                    <th>Indirizzo</th>
-                     <th>Data</th>
+                   <th>Ultimo Prezzo</th>
+                   <th>Modifica</th>
                 </tr>
-             </thead>
-           <tbody id="transactions-body"></tbody>
+            </thead>
+            <tbody id="crypto-list">
+            </tbody>
         </table>
+        <a href="#" class="view-more">Vedi altro ></a>
+        <div class="bottom-nav">
+         <div class="nav-item active">
+           <img src="home-icon.png" alt="HTX" class="nav-icon">
+             <span>HTX</span>
+          </div>
+         <div class="nav-item">
+           <img src="market-icon.png" alt="Mercati" class="nav-icon">
+           <span>Mercati</span>
+         </div>
+         <div class="nav-item">
+           <img src="trade-icon.png" alt="Trade" class="nav-icon">
+          <span>Trade</span>
+         </div>
+         <div class="nav-item">
+          <img src="futures-icon.png" alt="Futures" class="nav-icon">
+          <span>Futures</span>
+        </div>
+        <div class="nav-item">
+          <img src="asset-icon.png" alt="Asset" class="nav-icon">
+          <span>Asset</span>
+       </div>
         </div>
     </div>
     <script src="script.js"></script>
