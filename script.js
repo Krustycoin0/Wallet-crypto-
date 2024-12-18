@@ -1,108 +1,128 @@
-let wallets = {}
-let balances = {btc: 0, eth: 0}
-let transactions = []
+const cryptoData = [
+    {
+        id: 'trx',
+        name: 'TRX/USDT',
+        price: 0.276940,
+        change: -2.49,
+       img: "trx-icon.png"
+    },
+    {
+        id: 'xlm',
+        name: 'XLM/USDT',
+        price: 0.435038,
+        change: -0.34,
+        img: "xlm-icon.png"
+    },
+    {
+       id: 'atom',
+        name: 'ATOM/USDT',
+        price: 8.4499,
+       change: -1.54,
+       img: "atom-icon.png"
+    },
+    {
+        id: 'sui',
+        name: 'SUI/USDT',
+        price: 4.5904,
+        change: -3.49,
+        img: "sui-icon.png"
+    },
+    {
+        id: 'etc',
+        name: 'ETC/USDT',
+        price: 32.0858,
+        change: -1.55,
+       img: "etc-icon.png"
+    },
+    {
+        id: 'dot',
+        name: 'DOT/USDT',
+        price: 8.3856,
+        change: -2.54,
+        img: "dot-icon.png"
+    },
+    {
+      id: 'manta',
+        name: 'MANTA/USDT',
+        price: 0.9834,
+        change: -5.21,
+        img: "manta-icon.png"
+    },
+    {
+        id: 'dash',
+        name: 'DASH/USDT',
+        price: 43.26,
+        change: -2.19,
+         img: "dash-icon.png"
+    },
+    {
+        id: 'woo',
+        name: 'WOO/USDT',
+        price: 0.25404,
+        change: -2.58,
+        img: "woo-icon.png"
+    },
+    {
+        id: 'ton',
+        name: 'TON/USDT',
+        price: 5.7813,
+        change: -2.50,
+        img: "ton-icon.png"
+    },
 
-function manageWallet() {
-  const action = document.getElementById("wallet-action").value;
-  const walletInput = document.getElementById("wallet-input").value;
-  if (action === "create") {
-   const newPrivateKey = generatePrivateKey();
-   const newAddress = generatePublicKeyFromPrivateKey(newPrivateKey);
-      wallets[newAddress] = newPrivateKey;
-      alert(`Nuovo wallet creato. Indirizzo: ${newAddress} Privata: ${newPrivateKey}`);
-      updateBalances();
-  } else if (action === "import") {
-    if(walletInput){
-      const address = generatePublicKeyFromPrivateKey(walletInput);
-      wallets[address] = walletInput;
-      alert(`Wallet importato. Indirizzo: ${address} Privata: ${walletInput}`);
-     updateBalances();
-    }else{
-       alert("Inserisci una chiave privata o una frase seed.");
-      }
-}
-}
+];
+let userBalances = {}; // Saldo simulato per le crypto
+const cryptoList = document.getElementById('crypto-list');
+function updateCryptoList(data = cryptoData){
+       cryptoList.innerHTML = '';
 
-function generatePrivateKey() {
-   return Math.random().toString(36).substring(2);
- }
+       data.forEach(crypto =>{
+           const row = document.createElement('tr');
+            const imgCell = document.createElement('td');
+            const img = document.createElement("img");
+            img.src = crypto.img;
+            img.alt = crypto.name
+            imgCell.appendChild(img)
+            row.appendChild(imgCell)
 
- function generatePublicKeyFromPrivateKey(privateKey){
-      return `0x${privateKey.slice(0, 16)}`;
-}
-function updateBalances() {
-   const balancesBody = document.getElementById("balances-body");
-    balancesBody.innerHTML = "";
-      for (const currency in balances) {
-        const row = document.createElement("tr");
-          const currencyCell = document.createElement("td");
-        currencyCell.textContent = currency.toUpperCase();
-          const balanceCell = document.createElement("td");
-          balanceCell.textContent = balances[currency];
-            row.appendChild(currencyCell);
-         row.appendChild(balanceCell);
-          balancesBody.appendChild(row);
- }
-}
- function sendTransaction() {
-        const currency = document.getElementById("send-currency").value;
-        const address = document.getElementById("send-address").value;
-        const amount = parseFloat(document.getElementById("send-amount").value);
-         if (!address || isNaN(amount) || amount <= 0 ) {
-            alert("Inserisci un indirizzo valido e un importo corretto.");
-            return;
-        }
+            const nameCell = document.createElement('td');
+            nameCell.textContent = crypto.name;
+            row.appendChild(nameCell);
 
-        if(balances[currency] < amount){
-            alert("Saldo non sufficiente")
-            return;
-         }
+             const priceCell = document.createElement('td');
+             priceCell.textContent = crypto.price;
+            row.appendChild(priceCell);
 
-      balances[currency] -= amount;
-       updateBalances();
-        addTransaction("send", currency, amount, address);
-        alert("Transazione inviata.");
- }
-  function addTransaction(type, currency, amount, address) {
-       transactions.push({
-         type: type,
-         currency: currency.toUpperCase(),
-         amount: amount,
-         address: address,
-         date: new Date().toLocaleString()
+            const changeCell = document.createElement('td');
+             const changeSpan = document.createElement('span')
+              changeSpan.textContent = `${crypto.change}%`
+                if (crypto.change > 0) {
+                 changeSpan.classList.add('change-positive');
+                 }
+             else {
+                  changeSpan.classList.add('change-negative');
+               }
+           changeCell.appendChild(changeSpan);
+          row.appendChild(changeCell);
+
+
+             cryptoList.appendChild(row);
+        });
+
+    }
+ function showTab(tabName) {
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => tab.classList.remove('active'));
+         event.target.classList.add('active');
+    }
+
+ const searchInput = document.getElementById("search-crypto")
+    searchInput.addEventListener("input", function () {
+      const searchTerm = searchInput.value.toLowerCase();
+     const filteredData =  cryptoData.filter(crypto =>
+          crypto.name.toLowerCase().includes(searchTerm)
+      );
+        updateCryptoList(filteredData)
     });
-      updateTransactions();
-   }
-   function updateTransactions() {
-        const transactionsBody = document.getElementById("transactions-body");
-        transactionsBody.innerHTML = "";
-    transactions.forEach((transaction) => {
-            const row = document.createElement("tr");
-            const typeCell = document.createElement("td");
-            typeCell.textContent = transaction.type;
-            const currencyCell = document.createElement("td");
-            currencyCell.textContent = transaction.currency;
-            const amountCell = document.createElement("td");
-            amountCell.textContent = transaction.amount;
-            const addressCell = document.createElement("td");
-            addressCell.textContent = transaction.address;
-             const dateCell = document.createElement("td");
-            dateCell.textContent = transaction.date;
 
-             row.appendChild(typeCell);
-             row.appendChild(currencyCell);
-            row.appendChild(amountCell);
-            row.appendChild(addressCell);
-            row.appendChild(dateCell);
-
-           transactionsBody.appendChild(row);
-    });
-   }
-function generateReceiveAddress() {
-     const currency = document.getElementById("receive-currency").value;
-    if (wallets){
-        const address = Object.keys(wallets)[0];
-         document.getElementById("receive-address").value = address
-         alert(`Indirizzo pubblico per ${currency.toUpperCase()} generato e copiato.`);
-     }
-}
+  updateCryptoList();
