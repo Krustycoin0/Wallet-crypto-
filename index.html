@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Wallet (Simulato)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Crypto Wallet (Simulato)</h1>
+        <div class="wallet-section">
+          <h2>Gestione Wallet</h2>
+           <div class="form-group">
+              <label for="wallet-action">Azione Wallet:</label>
+              <select id="wallet-action">
+                  <option value="create">Crea Nuovo Wallet</option>
+                   <option value="import">Importa Wallet</option>
+               </select>
+           </div>
+             <div class="form-group">
+              <label for="wallet-input">Chiave privata (o frase seed):</label>
+              <input type="text" id="wallet-input"  placeholder="Inserisci la chiave privata (o frase seed)" >
+          </div>
+             <div class="form-group">
+             <button onclick="manageWallet()">Invia</button>
+          </div>
+        </div>
+
+         <div class="balances-section">
+          <h2>Saldo Disponibile</h2>
+           <table class="balances-table">
+               <thead>
+                   <tr>
+                    <th>Criptovaluta</th>
+                    <th>Saldo</th>
+                   </tr>
+                </thead>
+              <tbody id="balances-body">
+                  </tbody>
+             </table>
+           </div>
+
+          <div class="send-section">
+              <h2>Invia Transazione</h2>
+            <div class="form-group">
+             <label for="send-currency">Criptovaluta</label>
+             <select id="send-currency">
+                    <option value="btc">Bitcoin</option>
+                    <option value="eth">Ethereum</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="send-address">Indirizzo Destinatario</label>
+              <input type="text" id="send-address" placeholder="Inserisci l'indirizzo del destinatario">
+           </div>
+              <div class="form-group">
+                <label for="send-amount">Importo</label>
+                <input type="number" id="send-amount" placeholder="Inserisci l'importo da inviare">
+            </div>
+            <div class="form-group">
+              <button onclick="sendTransaction()">Invia Transazione</button>
+         </div>
+      </div>
+
+      <div class="receive-section">
+          <h2>Ricevi Transazioni</h2>
+            <div class="form-group">
+              <label for="receive-currency">Criptovaluta</label>
+              <select id="receive-currency">
+                    <option value="btc">Bitcoin</option>
+                    <option value="eth">Ethereum</option>
+              </select>
+           </div>
+            <div class="form-group">
+               <label for="receive-address">Indirizzo Pubblico</label>
+              <input type="text" id="receive-address"  placeholder="Indirizzo Pubblico generato">
+              <button onclick="generateReceiveAddress()" >Genera Indirizzo</button>
+             </div>
+        </div>
+
+      <div class="transactions-section">
+            <h2>Cronologia Transazioni</h2>
+        <table class="transactions-table">
+            <thead>
+               <tr>
+                   <th>Tipo</th>
+                    <th>Criptovaluta</th>
+                    <th>Importo</th>
+                    <th>Indirizzo</th>
+                     <th>Data</th>
+                </tr>
+             </thead>
+           <tbody id="transactions-body"></tbody>
+        </table>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
