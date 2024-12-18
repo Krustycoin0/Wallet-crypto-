@@ -1,5 +1,6 @@
-const API_KEY = 'C5CF3608-A514-45C1-88AD-35C48C2AF9EA';
-const API_URL = 'https://rest.coinapi.io/v1/assets';
+const API_KEY = 'fc8fe04f-0490-488a-bd9f-3d2513c7bde4'; // Inserisci la tua API key di Coinbase
+const API_SECRET = 'MHcCAQEEIGJ/8HdtrpPQgKufgpt295J8h2OdljFGW5IYPmbSh/rkoAoGCCqGSM49AwEHoQDQgAEi5Krz4lwoIykth8PL/TF'
+const API_URL = 'https://api.coinbase.com/v2/assets';
 const walletAddress = '0xD54DF1e7F8A84D1e8d0444FA3824d6485672b8F8';
 let userBalance = 1000; // Saldo iniziale simulato
 let cryptoData = [];
@@ -8,21 +9,23 @@ const cryptoList = document.getElementById('crypto-list');
 
 async function fetchCryptoData() {
   try {
-    const response = await fetch(API_URL, {
+   const response = await fetch(API_URL, {
       headers: {
-        'X-CoinAPI-Key': API_KEY,
+        'CB-ACCESS-KEY': API_KEY,
+        'CB-ACCESS-TIMESTAMP':  Math.floor(Date.now() / 1000),
+         'CB-ACCESS-SIGN': API_SECRET,
       },
     });
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    const data = await response.json();
-      cryptoData = data.filter(asset => asset.type_is_crypto && asset.price_usd)
+     const data = await response.json();
+      cryptoData = data.data.filter(asset => asset.type === 'crypto' && asset.latest_price)
           .map(asset => ({
-        id: asset.asset_id,
-        name: `${asset.asset_id}/${'USDT'}`,
-        price: asset.price_usd,
-        img: "crypto-icon.png",
+        id: asset.id,
+        name: `${asset.symbol}/${'USDT'}`,
+        price: asset.latest_price,
+         img: "crypto-icon.png",
         change: (Math.random() * (5 - -5) + -5).toFixed(2)
       }));
 
@@ -49,7 +52,7 @@ function updateCryptoList(data = cryptoData){
             row.appendChild(nameCell);
 
              const priceCell = document.createElement('td');
-             priceCell.textContent = crypto.price.toFixed(6);
+             priceCell.textContent = parseFloat(crypto.price).toFixed(6);
             row.appendChild(priceCell);
 
             const changeCell = document.createElement('td');
